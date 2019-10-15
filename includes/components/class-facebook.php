@@ -24,5 +24,15 @@ final class Facebook {
 	 */
 	public function __construct() {
 
+		// Add form button.
+		add_filter( 'hivepress/v1/forms/user_login/args', [ $this, 'add_form_button' ] );
+		add_filter( 'hivepress/v1/forms/user_register/args', [ $this, 'add_form_button' ] );
+	}
+
+	// todo
+	public function add_form_button( $form ) {
+		$form['header'].= '<a href="#" class="button">Button</a>';
+
+		return $form;
 	}
 }

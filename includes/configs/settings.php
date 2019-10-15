@@ -15,7 +15,7 @@ return [
 		'sections' => [
 			'authentication' => [
 				'fields' => [
-					'authentication_methods' => [
+					'user_authentication_methods' => [
 						'label'   => esc_html__( 'Authentication Methods', 'hivepress-authentication' ),
 						'type'    => 'checkboxes',
 						'order'   => 20,
