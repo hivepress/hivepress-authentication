@@ -25,7 +25,7 @@ final class Google {
 	public function __construct() {
 
 		// Check Google status.
-		if ( ! in_array( 'google', (array) get_option( 'hp_user_authentication_methods' ), true ) || get_option( 'hp_google_client_id' ) === '' ) {
+		if ( is_user_logged_in() || ! in_array( 'google', (array) get_option( 'hp_user_authentication_methods' ), true ) || get_option( 'hp_google_client_id' ) === '' ) {
 			return;
 		}
 
@@ -39,7 +39,15 @@ final class Google {
 
 			// Render header.
 			add_action( 'wp_head', [ $this, 'render_header' ] );
+
+			// todo.
+			add_filter( 'hivepress/v1/auth/buttons', [ $this, 'render_button' ] );
 		}
+	}
+
+	// todo.
+	public function render_button( $output ) {
+		return $output . '<div class="g-signin2" data-theme="dark" data-height="40" data-longtitle="true" data-onsuccess="todo2"></div><br><br>';
 	}
 
 	// todo.

@@ -25,7 +25,7 @@ final class Facebook {
 	public function __construct() {
 
 		// Check Facebook status.
-		if ( ! in_array( 'facebook', (array) get_option( 'hp_user_authentication_methods' ), true ) || get_option( 'hp_facebook_app_id' ) === '' ) {
+		if ( is_user_logged_in() || ! in_array( 'facebook', (array) get_option( 'hp_user_authentication_methods' ), true ) || get_option( 'hp_facebook_app_id' ) === '' ) {
 			return;
 		}
 
@@ -39,7 +39,15 @@ final class Facebook {
 
 			// Render footer.
 			add_action( 'wp_footer', [ $this, 'render_footer' ] );
+
+			// todo.
+			add_filter( 'hivepress/v1/auth/buttons', [ $this, 'render_button' ] );
 		}
+	}
+
+	// todo.
+	public function render_button( $output ) {
+		return $output . '<div class="fb-login-button" data-width="" data-size="large" data-button-type="login_with" data-auto-logout-link="false" data-use-continue-as="false" data-scope="email" data-onlogin="hivepress.todo()"></div><br><br>';
 	}
 
 	// todo.
