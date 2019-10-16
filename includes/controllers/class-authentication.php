@@ -102,7 +102,7 @@ class Authentication extends Controller {
 			]
 		);
 
-		if ( ! empty( $users ) ) {
+		if ( ! empty( $users ) && hp\get_array_value( $response, 'id' ) ) {
 			$user = reset( $users );
 		} else {
 

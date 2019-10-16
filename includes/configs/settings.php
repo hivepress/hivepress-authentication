@@ -16,11 +16,12 @@ return [
 			'registration' => [
 				'fields' => [
 					'user_auth_methods' => [
-						'label'   => esc_html__( 'Authentication Methods', 'hivepress-authentication' ),
-						'type'    => 'checkboxes',
-						'order'   => 20,
+						'label'       => esc_html__( 'Authentication Methods', 'hivepress-authentication' ),
+						'description' => esc_html__( 'Select the available authentication methods. Each method requires the API credentials that you can set in the Integrations section.', 'hivepress-authentication' ),
+						'type'        => 'checkboxes',
+						'order'       => 20,
 
-						'options' => [
+						'options'     => [
 							'facebook' => 'Facebook',
 							'google'   => 'Google',
 						],
