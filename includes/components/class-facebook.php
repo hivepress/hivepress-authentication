@@ -25,7 +25,7 @@ final class Facebook {
 	public function __construct() {
 
 		// Check Facebook status.
-		if ( is_user_logged_in() || ! in_array( 'facebook', (array) get_option( 'hp_user_auth_methods' ), true ) || get_option( 'hp_facebook_app_id' ) === '' ) {
+		if ( is_user_logged_in() || ! in_array( 'facebook', (array) get_option( 'hp_user_auth_methods' ), true ) || ! get_option( 'hp_facebook_app_id' ) ) {
 			return;
 		}
 

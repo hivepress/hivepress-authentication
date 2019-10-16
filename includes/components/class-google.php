@@ -25,7 +25,7 @@ final class Google {
 	public function __construct() {
 
 		// Check Google status.
-		if ( is_user_logged_in() || ! in_array( 'google', (array) get_option( 'hp_user_auth_methods' ), true ) || get_option( 'hp_google_client_id' ) === '' ) {
+		if ( is_user_logged_in() || ! in_array( 'google', (array) get_option( 'hp_user_auth_methods' ), true ) || ! get_option( 'hp_google_client_id' ) ) {
 			return;
 		}
 
