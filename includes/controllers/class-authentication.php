@@ -1,6 +1,6 @@
 <?php
 /**
- * Facebook controller.
+ * Authentication controller.
  *
  * @package HivePress\Controllers
  */
@@ -13,11 +13,11 @@ use HivePress\Helpers as hp;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Facebook controller class.
+ * Authentication controller class.
  *
- * @class Facebook
+ * @class Authentication
  */
-class Facebook extends Controller {
+class Authentication extends Controller {
 
 	/**
 	 * Controller name.
@@ -82,19 +82,9 @@ class Facebook extends Controller {
 			return hp\rest_error( 403 );
 		}
 
-		$response = json_decode(
-			wp_remote_retrieve_body(
-				wp_remote_get(
-					'https://graph.facebook.com/v4.0/me?' . http_build_query(
-						[
-							'fields'       => 'id,first_name,last_name,email',
-							'access_token' => $request->get_param( 'access_token' ),
-						]
-					)
-				)
-			),
-			true
-		);
+		// todo.
+		$provider = sanitize_key( $request->get_param( 'provider' ) );
+		$response = apply_filters( 'hivepress/v1/todo/' . $provider, [], $request->get_params() );
 
 		if ( empty( $response ) || isset( $response['error'] ) ) {
 			return hp\rest_error( 401 );
@@ -102,7 +92,7 @@ class Facebook extends Controller {
 
 		$users = get_users(
 			[
-				'meta_key'   => 'hp_facebook_id',
+				'meta_key'   => 'hp_' . $provider . '_id',
 				'meta_value' => $response['id'],
 				'number'     => 1,
 			]
@@ -139,8 +129,8 @@ class Facebook extends Controller {
 			// Get user.
 			$user = get_userdata( $user_id );
 
-			// Set Facebook ID.
-			update_user_meta( $user->ID, 'hp_facebook_id', $response['id'] );
+			// Set provider ID.
+			update_user_meta( $user->ID, 'hp_' . $provider . '_id', $response['id'] );
 
 			// Set name.
 			update_user_meta( $user->ID, 'first_name', $response['first_name'] );

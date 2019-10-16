@@ -22,6 +22,7 @@ return [
 
 						'options' => [
 							'facebook' => 'Facebook',
+							'google'   => 'Google',
 						],
 					],
 				],
@@ -31,9 +32,30 @@ return [
 
 	'integrations' => [
 		'sections' => [
+			'google'   => [
+				'title'  => 'Google',
+				'order'  => 30,
+
+				'fields' => [
+					'google_client_id'     => [
+						'label'      => esc_html__( 'Client ID', 'hivepress-authentication' ),
+						'type'       => 'text',
+						'max_length' => 256,
+						'order'      => 10,
+					],
+
+					'google_client_secret' => [
+						'label'      => esc_html__( 'Client Secret', 'hivepress-authentication' ),
+						'type'       => 'text',
+						'max_length' => 256,
+						'order'      => 20,
+					],
+				],
+			],
+
 			'facebook' => [
 				'title'  => 'Facebook',
-				'order'  => 30,
+				'order'  => 40,
 
 				'fields' => [
 					'facebook_app_id'     => [

@@ -25,9 +25,12 @@ final class Facebook {
 	public function __construct() {
 
 		// Check Facebook status.
-		if ( ! in_array( 'facebook', (array) get_option( 'hp_user_authentication_methods' ), true ) || get_option( 'hp_facebook_app_id' ) === '' || get_option( 'hp_facebook_app_secret' ) === '' ) {
+		if ( ! in_array( 'facebook', (array) get_option( 'hp_user_authentication_methods' ), true ) || get_option( 'hp_facebook_app_id' ) === '' ) {
 			return;
 		}
+
+		// todo.
+		add_filter( 'hivepress/v1/todo/facebook', [ $this, 'todo' ], 10, 2 );
 
 		if ( ! is_admin() ) {
 
@@ -37,6 +40,25 @@ final class Facebook {
 			// Render footer.
 			add_action( 'wp_footer', [ $this, 'render_footer' ] );
 		}
+	}
+
+	// todo.
+	public function todo( $response, $request ) {
+		$response = json_decode(
+			wp_remote_retrieve_body(
+				wp_remote_get(
+					'https://graph.facebook.com/v4.0/me?' . http_build_query(
+						[
+							'fields'       => 'id,first_name,last_name,email',
+							'access_token' => $request['access_token'],
+						]
+					)
+				)
+			),
+			true
+		);
+
+		return $response;
 	}
 
 	/**
