@@ -11,8 +11,8 @@ use HivePress\Helpers as hp;
 defined( 'ABSPATH' ) || exit;
 
 return [
-	'authentication_frontend' => [
-		'handle'  => 'hp-authentication-frontend',
+	'auth_frontend' => [
+		'handle'  => 'hp-auth-frontend',
 		'src'     => HP_AUTHENTICATION_URL . '/assets/js/frontend.min.js',
 		'version' => HP_AUTHENTICATION_VERSION,
 		'deps'    => [ 'hp-core-frontend' ],

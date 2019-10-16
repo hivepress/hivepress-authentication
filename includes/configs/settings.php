@@ -13,9 +13,9 @@ defined( 'ABSPATH' ) || exit;
 return [
 	'users'        => [
 		'sections' => [
-			'authentication' => [
+			'registration' => [
 				'fields' => [
-					'user_authentication_methods' => [
+					'user_auth_methods' => [
 						'label'   => esc_html__( 'Authentication Methods', 'hivepress-authentication' ),
 						'type'    => 'checkboxes',
 						'order'   => 20,

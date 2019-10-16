@@ -25,12 +25,12 @@ final class Google {
 	public function __construct() {
 
 		// Check Google status.
-		if ( is_user_logged_in() || ! in_array( 'google', (array) get_option( 'hp_user_authentication_methods' ), true ) || get_option( 'hp_google_client_id' ) === '' ) {
+		if ( is_user_logged_in() || ! in_array( 'google', (array) get_option( 'hp_user_auth_methods' ), true ) || get_option( 'hp_google_client_id' ) === '' ) {
 			return;
 		}
 
-		// todo.
-		add_filter( 'hivepress/v1/todo/google', [ $this, 'todo' ], 10, 2 );
+		// Set response.
+		add_filter( 'hivepress/v1/auth/response', [ $this, 'set_response' ], 10, 3 );
 
 		if ( ! is_admin() ) {
 
@@ -40,44 +40,53 @@ final class Google {
 			// Render header.
 			add_action( 'wp_head', [ $this, 'render_header' ] );
 
-			// todo.
+			// Render button.
 			add_filter( 'hivepress/v1/auth/buttons', [ $this, 'render_button' ] );
 		}
 	}
 
-	// todo.
-	public function render_button( $output ) {
-		return $output . '<div class="g-signin2" data-theme="dark" data-height="40" data-longtitle="true" data-onsuccess="todo2"></div><br><br>';
-	}
+	/**
+	 * Sets response.
+	 *
+	 * @param array  $response Response data.
+	 * @param array  $request Request data.
+	 * @param string $provider Provider name.
+	 * @return mixed
+	 */
+	public function set_response( $response, $request, $provider ) {
+		if ( 'google' === $provider ) {
 
-	// todo.
-	public function todo( $response, $request ) {
-		$response = json_decode(
-			wp_remote_retrieve_body(
-				wp_remote_get(
-					'https://oauth2.googleapis.com/tokeninfo?' . http_build_query(
-						[
-							'id_token' => $request['id_token'],
-						]
+			// Get response.
+			$response = json_decode(
+				wp_remote_retrieve_body(
+					wp_remote_get(
+						'https://oauth2.googleapis.com/tokeninfo?' . http_build_query(
+							[
+								'id_token' => $request['id_token'],
+							]
+						)
 					)
-				)
-			),
-			true
-		);
+				),
+				true
+			);
 
-		if ( ! empty( $response ) && ! isset( $response['error'] ) ) {
+			if ( ! empty( $response ) && ! isset( $response['error'] ) ) {
 
-			if ( $response['aud'] !== get_option( 'hp_google_client_id' ) ) {
-				return [ 'error' => 'invalid_client' ];
+				// Check client ID.
+				if ( get_option( 'hp_google_client_id' ) !== $response['aud'] ) {
+					return [ 'error' => 'invalid_client' ];
+				}
+
+				// Check email.
+				if ( 'true' !== $response['email_verified'] ) {
+					return [ 'error' => 'unverified_email' ];
+				}
+
+				// Set details.
+				$response['id']         = $response['sub'];
+				$response['first_name'] = $response['given_name'];
+				$response['last_name']  = $response['family_name'];
 			}
-
-			if ( $response['email_verified'] !== 'true' ) {
-				return [ 'error' => 'unverified_email' ];
-			}
-
-			$response['id']         = $response['sub'];
-			$response['first_name'] = $response['given_name'];
-			$response['last_name']  = $response['family_name'];
 		}
 
 		return $response;
@@ -98,5 +107,15 @@ final class Google {
 	 */
 	public function render_header() {
 		echo '<meta name="google-signin-client_id" content="' . esc_attr( get_option( 'hp_google_client_id' ) ) . '">';
+	}
+
+	/**
+	 * Renders button.
+	 *
+	 * @param string $output Button HTML.
+	 * @return string
+	 */
+	public function render_button( $output ) {
+		return $output . '<div class="g-signin2" data-theme="dark" data-height="40" data-longtitle="true" data-onsuccess="onGoogleAuth"></div><br><br>';
 	}
 }

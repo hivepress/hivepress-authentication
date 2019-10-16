@@ -8,6 +8,7 @@
 namespace HivePress\Controllers;
 
 use HivePress\Helpers as hp;
+use HivePress\Models;
 
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
@@ -43,12 +44,12 @@ class Authentication extends Controller {
 			[
 				'routes' => [
 					[
-						'path'      => '/users',
+						'path'      => '/auth',
 						'rest'      => true,
 
 						'endpoints' => [
 							[
-								'path'    => '/login/(?P<provider>[a-z]+)',
+								'path'    => '/(?P<provider>[a-z]+)',
 								'methods' => 'POST',
 								'action'  => 'authenticate_user',
 							],
@@ -82,14 +83,17 @@ class Authentication extends Controller {
 			return hp\rest_error( 403 );
 		}
 
-		// todo.
+		// Get provider.
 		$provider = sanitize_key( $request->get_param( 'provider' ) );
-		$response = apply_filters( 'hivepress/v1/todo/' . $provider, [], $request->get_params() );
+
+		// Filter response.
+		$response = apply_filters( 'hivepress/v1/auth/response', [], $request->get_params(), $provider );
 
 		if ( empty( $response ) || isset( $response['error'] ) ) {
 			return hp\rest_error( 401 );
 		}
 
+		// Get user by provider ID.
 		$users = get_users(
 			[
 				'meta_key'   => 'hp_' . $provider . '_id',
@@ -101,6 +105,8 @@ class Authentication extends Controller {
 		if ( ! empty( $users ) ) {
 			$user = reset( $users );
 		} else {
+
+			// Get user by email.
 			$user = get_user_by( 'email', $response['email'] );
 		}
 
@@ -127,27 +133,29 @@ class Authentication extends Controller {
 			}
 
 			// Get user.
-			$user = get_userdata( $user_id );
+			$user = Models\User::get( $user_id );
 
 			// Set provider ID.
-			update_user_meta( $user->ID, 'hp_' . $provider . '_id', $response['id'] );
+			update_user_meta( $user_id, 'hp_' . $provider . '_id', $response['id'] );
 
 			// Set name.
-			update_user_meta( $user->ID, 'first_name', $response['first_name'] );
-			update_user_meta( $user->ID, 'last_name', $response['last_name'] );
+			update_user_meta( $user_id, 'first_name', $response['first_name'] );
+			update_user_meta( $user_id, 'last_name', $response['last_name'] );
 
-			// todo action.
+			do_action( 'hivepress/v1/users/register', $user_id, $user );
+		} else {
+			$user_id = $user->ID;
 		}
 
 		// Authenticate user.
 		if ( ! is_user_logged_in() ) {
-			wp_set_auth_cookie( $user->ID, true );
+			wp_set_auth_cookie( $user_id, true );
 		}
 
 		return new \WP_Rest_Response(
 			[
 				'data' => [
-					'id' => $user->ID,
+					'id' => $user_id,
 				],
 			],
 			200
