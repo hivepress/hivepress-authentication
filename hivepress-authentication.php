@@ -2,7 +2,7 @@
 /**
  * Plugin Name: HivePress Authentication
  * Description: Authentication extension for HivePress plugin.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: HivePress
  * Author URI: https://hivepress.io/
  * Text Domain: hivepress-authentication
