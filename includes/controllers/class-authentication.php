@@ -142,7 +142,7 @@ class Authentication extends Controller {
 			update_user_meta( $user_id, 'first_name', $response['first_name'] );
 			update_user_meta( $user_id, 'last_name', $response['last_name'] );
 
-			do_action( 'hivepress/v1/users/register', $user_id, $user );
+			do_action( 'hivepress/v1/models/user/register', $user_id, $user );
 		} else {
 			$user_id = $user->ID;
 		}
