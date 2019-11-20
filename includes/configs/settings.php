@@ -39,7 +39,7 @@ return [
 
 				'fields' => [
 					'google_client_id' => [
-						'label'      => esc_html__( 'Client ID', 'hivepress-authentication' ),
+						'label'      => hivepress()->translator->get_string( 'client_id' ),
 						'type'       => 'text',
 						'max_length' => 256,
 						'order'      => 10,
@@ -53,7 +53,7 @@ return [
 
 				'fields' => [
 					'facebook_app_id' => [
-						'label'      => esc_html__( 'App ID', 'hivepress-authentication' ),
+						'label'      => hivepress()->translator->get_string( 'app_id' ),
 						'type'       => 'text',
 						'max_length' => 256,
 						'order'      => 10,

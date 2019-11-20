@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HivePress Authentication\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-16 19:04+0000\n"
+"POT-Creation-Date: 2019-11-20 12:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -15,36 +15,28 @@ msgstr ""
 "X-Generator: Loco https://localise.biz/\n"
 "X-Loco-Version: 2.3.0; wp-5.2.4"
 
-#: includes/configs/settings.php:56
-msgid "App ID"
-msgstr ""
-
-#. Description of the plugin
-msgid "Authentication extension for HivePress plugin."
-msgstr ""
-
 #: includes/configs/settings.php:19
 msgid "Authentication Methods"
-msgstr ""
-
-#: includes/configs/settings.php:42
-msgid "Client ID"
-msgstr ""
-
-#. Author of the plugin
-msgid "HivePress"
-msgstr ""
-
-#. Name of the plugin
-msgid "HivePress Authentication"
-msgstr ""
-
-#. Author URI of the plugin
-msgid "https://hivepress.io/"
 msgstr ""
 
 #: includes/configs/settings.php:20
 msgid ""
 "Select the available authentication methods. Each method requires the API "
 "credentials that you can set in the Integrations section."
+msgstr ""
+
+#. Name of the plugin
+msgid "HivePress Authentication"
+msgstr ""
+
+#. Description of the plugin
+msgid "Allow users to sign in via third-party services."
+msgstr ""
+
+#. Author of the plugin
+msgid "HivePress"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://hivepress.io/"
 msgstr ""
