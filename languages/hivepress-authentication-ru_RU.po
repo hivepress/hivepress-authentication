@@ -1,0 +1,44 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: HivePress Authentication\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-11-20 12:10+0000\n"
+"PO-Revision-Date: 2019-11-21 12:51+0000\n"
+"Last-Translator: admin <admin@admin.com>\n"
+"Language-Team: Русский\n"
+"Language: ru_RU\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10 >= 2 && "
+"n%10<=4 &&(n%100<10||n%100 >= 20)? 1 : 2);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.3.1; wp-5.3"
+
+#: includes/configs/settings.php:19
+msgid "Authentication Methods"
+msgstr "Методы Аутентификации"
+
+#: includes/configs/settings.php:20
+msgid ""
+"Select the available authentication methods. Each method requires the API "
+"credentials that you can set in the Integrations section."
+msgstr ""
+"Выберите доступные методы аутентификации. Для каждого метода необходимо "
+"ввести данные API в разделе Интеграции."
+
+#. Name of the plugin
+msgid "HivePress Authentication"
+msgstr ""
+
+#. Description of the plugin
+msgid "Allow users to sign in via third-party services."
+msgstr ""
+
+#. Author of the plugin
+msgid "HivePress"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://hivepress.io/"
+msgstr ""
