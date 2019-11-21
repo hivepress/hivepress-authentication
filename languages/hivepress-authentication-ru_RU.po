@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: HivePress Authentication\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-11-20 12:10+0000\n"
-"PO-Revision-Date: 2019-11-21 12:51+0000\n"
+"PO-Revision-Date: 2019-11-21 20:13+0000\n"
 "Last-Translator: admin <admin@admin.com>\n"
 "Language-Team: Русский\n"
 "Language: ru_RU\n"
@@ -17,7 +17,7 @@ msgstr ""
 
 #: includes/configs/settings.php:19
 msgid "Authentication Methods"
-msgstr "Методы Аутентификации"
+msgstr "Методы аутентификации"
 
 #: includes/configs/settings.php:20
 msgid ""
@@ -29,11 +29,11 @@ msgstr ""
 
 #. Name of the plugin
 msgid "HivePress Authentication"
-msgstr ""
+msgstr "HivePress Аутентификация"
 
 #. Description of the plugin
 msgid "Allow users to sign in via third-party services."
-msgstr ""
+msgstr "Дайте пользователям возможность входить через сторонние сервисы."
 
 #. Author of the plugin
 msgid "HivePress"
