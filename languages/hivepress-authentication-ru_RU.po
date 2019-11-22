@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: HivePress Authentication\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-11-20 12:10+0000\n"
-"PO-Revision-Date: 2019-11-21 20:13+0000\n"
+"PO-Revision-Date: 2019-11-22 11:33+0000\n"
 "Last-Translator: admin <admin@admin.com>\n"
 "Language-Team: Русский\n"
 "Language: ru_RU\n"
@@ -37,8 +37,8 @@ msgstr "Дайте пользователям возможность входи�
 
 #. Author of the plugin
 msgid "HivePress"
-msgstr ""
+msgstr "HivePress"
 
 #. Author URI of the plugin
 msgid "https://hivepress.io/"
-msgstr ""
+msgstr "https://hivepress.io/"
