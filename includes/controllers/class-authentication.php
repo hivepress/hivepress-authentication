@@ -96,7 +96,7 @@ class Authentication extends Controller {
 		// Get user by provider ID.
 		$users = get_users(
 			[
-				'meta_key'   => 'hp_' . $provider . '_id',
+				'meta_key'   => hp\prefix( $provider ) . '_id',
 				'meta_value' => $response['id'],
 				'number'     => 1,
 			]
@@ -136,7 +136,7 @@ class Authentication extends Controller {
 			$user = Models\User::get( $user_id );
 
 			// Set provider ID.
-			update_user_meta( $user_id, 'hp_' . $provider . '_id', $response['id'] );
+			update_user_meta( $user_id, hp\prefix( $provider ) . '_id', $response['id'] );
 
 			// Set name.
 			update_user_meta( $user_id, 'first_name', $response['first_name'] );
