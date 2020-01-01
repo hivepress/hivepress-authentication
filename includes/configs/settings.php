@@ -19,7 +19,7 @@ return [
 						'label'       => esc_html__( 'Authentication Methods', 'hivepress-authentication' ),
 						'description' => esc_html__( 'Select the available authentication methods. Each method requires the API credentials that you can set in the Integrations section.', 'hivepress-authentication' ),
 						'type'        => 'checkboxes',
-						'order'       => 20,
+						'_order'      => 20,
 
 						'options'     => [
 							'facebook' => 'Facebook',
@@ -35,28 +35,28 @@ return [
 		'sections' => [
 			'google'   => [
 				'title'  => 'Google',
-				'order'  => 30,
+				'_order' => 30,
 
 				'fields' => [
 					'google_client_id' => [
 						'label'      => hivepress()->translator->get_string( 'client_id' ),
 						'type'       => 'text',
 						'max_length' => 256,
-						'order'      => 10,
+						'_order'     => 10,
 					],
 				],
 			],
 
 			'facebook' => [
 				'title'  => 'Facebook',
-				'order'  => 40,
+				'_order' => 40,
 
 				'fields' => [
 					'facebook_app_id' => [
 						'label'      => hivepress()->translator->get_string( 'app_id' ),
 						'type'       => 'text',
 						'max_length' => 256,
-						'order'      => 10,
+						'_order'     => 10,
 					],
 				],
 			],

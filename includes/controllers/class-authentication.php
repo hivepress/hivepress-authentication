@@ -21,30 +21,23 @@ defined( 'ABSPATH' ) || exit;
 class Authentication extends Controller {
 
 	/**
-	 * Controller routes.
-	 *
-	 * @var array
-	 */
-	protected static $routes = [];
-
-	/**
-	 * Class initializer.
+	 * Class constructor.
 	 *
 	 * @param array $args Controller arguments.
 	 */
-	public static function init( $args = [] ) {
+	public function __construct( $args = [] ) {
 		$args = hp\merge_arrays(
 			[
 				'routes' => [
 					[
-						'path'      => '/auth',
-						'rest'      => true,
+						'path'   => '/auth',
+						'rest'   => true,
 
-						'endpoints' => [
+						'routes' => [
 							[
-								'path'    => '/(?P<provider>[a-z]+)',
-								'methods' => 'POST',
-								'action'  => 'authenticate_user',
+								'path'   => '/(?P<provider>[a-z]+)',
+								'method' => 'POST',
+								'action' => [ $this, 'authenticate_user' ],
 							],
 						],
 					],
@@ -53,7 +46,7 @@ class Authentication extends Controller {
 			$args
 		);
 
-		parent::init( $args );
+		parent::__construct( $args );
 	}
 
 	/**
