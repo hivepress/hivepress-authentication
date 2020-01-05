@@ -119,7 +119,7 @@ class Authentication extends Controller {
 			}
 
 			// Get user.
-			$user = Models\User::get_by_id( $user_id );
+			$user = Models\User::query()->get_by_id( $user_id );
 
 			// Set provider ID.
 			update_user_meta( $user_id, hp\prefix( $provider ) . '_id', $response['id'] );

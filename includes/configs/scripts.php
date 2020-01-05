@@ -13,8 +13,8 @@ defined( 'ABSPATH' ) || exit;
 return [
 	'authentication_frontend' => [
 		'handle'  => 'hp-authentication-frontend',
-		'src'     => HP_AUTHENTICATION_URL . '/assets/js/frontend.min.js',
-		'version' => HP_AUTHENTICATION_VERSION,
+		'src'     => hivepress()->get_url( 'authentication' ) . '/assets/js/frontend.min.js',
+		'version' => hivepress()->get_version( 'authentication' ),
 		'deps'    => [ 'hp-core-frontend' ],
 	],
 ];
