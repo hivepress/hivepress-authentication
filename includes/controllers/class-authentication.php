@@ -29,9 +29,9 @@ final class Authentication extends Controller {
 		$args = hp\merge_arrays(
 			[
 				'routes' => [
-					'user_auth_action' => [
+					'user_authenticate_action' => [
 						'base'   => 'users_resource',
-						'path'   => '/auth/(?P<provider_name>[a-z]+)',
+						'path'   => '/authenticate/(?P<authenticator>[a-z_]+)',
 						'method' => 'POST',
 						'action' => [ $this, 'authenticate_user' ],
 						'rest'   => true,
@@ -62,21 +62,21 @@ final class Authentication extends Controller {
 			return hp\rest_error( 403 );
 		}
 
-		// Get provider.
-		$provider = sanitize_key( $request->get_param( 'provider_name' ) );
+		// Get authenticator.
+		$authenticator = sanitize_key( $request->get_param( 'authenticator' ) );
 
 		// Get response.
-		$response = apply_filters( 'hivepress/v1/authenticators/' . $provider . '/response', [], $request->get_params() );
+		$response = apply_filters( 'hivepress/v1/authenticators/' . $authenticator . '/response', [], $request->get_params() );
 
 		if ( empty( $response ) || isset( $response['error'] ) ) {
 			return hp\rest_error( 401 );
 		}
 
-		// Get user by provider ID.
+		// Get user by authenticator ID.
 		$user_object = reset(
 			( get_users(
 				[
-					'meta_key'   => hp\prefix( $provider . '_id' ),
+					'meta_key'   => hp\prefix( $authenticator . '_id' ),
 					'meta_value' => $response['id'],
 					'number'     => 1,
 				]
@@ -87,6 +87,12 @@ final class Authentication extends Controller {
 
 			// Get user by email.
 			$user_object = get_user_by( 'email', $response['email'] );
+
+			if ( $user_object ) {
+
+				// Set authenticator ID.
+				update_user_meta( $user_object->ID, hp\prefix( $authenticator . '_id' ), $response['id'] );
+			}
 		}
 
 		if ( empty( $user_object ) ) {
@@ -109,21 +115,21 @@ final class Authentication extends Controller {
 
 			// Register user.
 			$user = ( new Models\User() )->fill(
-				array_merge(
-					$response,
-					[
-						'username' => $username,
-						'password' => $password,
-					]
-				)
+				[
+					'username'   => $username,
+					'password'   => $password,
+					'email'      => $response['email'],
+					'first_name' => hp\get_array_value( $response, 'first_name' ),
+					'last_name'  => hp\get_array_value( $response, 'last_name' ),
+				]
 			);
 
 			if ( ! $user->save() ) {
 				return hp\rest_error( 400 );
 			}
 
-			// Set provider ID.
-			update_user_meta( $user->get_id(), hp\prefix( $provider . '_id' ), $response['id'] );
+			// Set authenticator ID.
+			update_user_meta( $user->get_id(), hp\prefix( $authenticator . '_id' ), $response['id'] );
 
 			do_action(
 				'hivepress/v1/models/user/register',
@@ -131,7 +137,6 @@ final class Authentication extends Controller {
 				array_merge(
 					$response,
 					[
-						'username' => $username,
 						'password' => $password,
 					]
 				)
