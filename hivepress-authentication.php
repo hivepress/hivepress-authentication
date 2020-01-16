@@ -2,7 +2,7 @@
 /**
  * Plugin Name: HivePress Authentication
  * Description: Allow users to sign in via third-party services.
- * Version: 1.0.1
+ * Version: 1.1.0
  * Author: HivePress
  * Author URI: https://hivepress.io/
  * Text Domain: hivepress-authentication
@@ -14,10 +14,10 @@
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
-// Register plugin directory.
+// Register extension directory.
 add_filter(
-	'hivepress/v1/dirs',
-	function( $dirs ) {
-		return array_merge( $dirs, [ __DIR__ ] );
+	'hivepress/v1/extensions',
+	function( $extensions ) {
+		return array_merge( $extensions, [ __DIR__ ] );
 	}
 );

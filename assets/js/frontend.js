@@ -4,11 +4,11 @@
 	// User authentication
 	hivepress.authUser = function(data) {
 		$.ajax({
-			url: hpCoreFrontendData.apiURL + '/auth/' + data.provider,
+			url: hivepressCoreData.apiURL + '/auth/' + data.provider,
 			method: 'POST',
 			data: data,
 			beforeSend: function(xhr) {
-				xhr.setRequestHeader('X-WP-Nonce', hpCoreFrontendData.apiNonce);
+				xhr.setRequestHeader('X-WP-Nonce', hivepressCoreData.apiNonce);
 			},
 			complete: function(xhr) {
 				var response = xhr.responseJSON;

@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @class Authentication
  */
-class Authentication extends Controller {
+final class Authentication extends Controller {
 
 	/**
 	 * Class constructor.
@@ -29,17 +29,12 @@ class Authentication extends Controller {
 		$args = hp\merge_arrays(
 			[
 				'routes' => [
-					[
-						'path'   => '/auth',
+					'user_auth_action' => [
+						'base'   => 'users_resource',
+						'path'   => '/auth/(?P<provider_name>[a-z]+)',
+						'method' => 'POST',
+						'action' => [ $this, 'authenticate_user' ],
 						'rest'   => true,
-
-						'routes' => [
-							[
-								'path'   => '/(?P<provider>[a-z]+)',
-								'method' => 'POST',
-								'action' => [ $this, 'authenticate_user' ],
-							],
-						],
 					],
 				],
 			],
@@ -58,9 +53,7 @@ class Authentication extends Controller {
 	public function authenticate_user( $request ) {
 
 		// Check authentication.
-		$nonce = hp\get_array_value( $request->get_params(), '_wpnonce', $request->get_header( 'X-WP-Nonce' ) );
-
-		if ( ! is_user_logged_in() && ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+		if ( ! is_user_logged_in() && ! wp_verify_nonce( $request->get_header( 'X-WP-Nonce' ), 'wp_rest' ) ) {
 			return hp\rest_error( 401 );
 		}
 
@@ -70,40 +63,40 @@ class Authentication extends Controller {
 		}
 
 		// Get provider.
-		$provider = sanitize_key( $request->get_param( 'provider' ) );
+		$provider = sanitize_key( $request->get_param( 'provider_name' ) );
 
-		// Filter response.
-		$response = apply_filters( 'hivepress/v1/auth/response', [], $request->get_params(), $provider );
+		// Get response.
+		$response = apply_filters( 'hivepress/v1/authenticators/' . $provider . '/response', [], $request->get_params() );
 
 		if ( empty( $response ) || isset( $response['error'] ) ) {
 			return hp\rest_error( 401 );
 		}
 
 		// Get user by provider ID.
-		$users = get_users(
-			[
-				'meta_key'   => hp\prefix( $provider ) . '_id',
-				'meta_value' => $response['id'],
-				'number'     => 1,
-			]
+		$user_object = reset(
+			( get_users(
+				[
+					'meta_key'   => hp\prefix( $provider . '_id' ),
+					'meta_value' => $response['id'],
+					'number'     => 1,
+				]
+			) )
 		);
 
-		if ( ! empty( $users ) && hp\get_array_value( $response, 'id' ) ) {
-			$user = reset( $users );
-		} else {
+		if ( empty( $user_object ) ) {
 
 			// Get user by email.
-			$user = get_user_by( 'email', $response['email'] );
+			$user_object = get_user_by( 'email', $response['email'] );
 		}
 
-		if ( false === $user ) {
+		if ( empty( $user_object ) ) {
 
 			// Get username.
-			list($username, $domain) = explode( '@', $response['email'] );
+			$username = reset( ( explode( '@', $response['email'] ) ) );
 
 			$username = sanitize_user( $username, true );
 
-			if ( '' === $username ) {
+			if ( empty( $username ) ) {
 				$username = 'user';
 			}
 
@@ -111,40 +104,54 @@ class Authentication extends Controller {
 				$username .= wp_rand( 1, 9 );
 			}
 
-			// Register user.
-			$user_id = wp_create_user( $username, wp_generate_password(), $response['email'] );
+			// Get password.
+			$password = wp_generate_password();
 
-			if ( is_wp_error( $user_id ) ) {
+			// Register user.
+			$user = ( new Models\User() )->fill(
+				array_merge(
+					$response,
+					[
+						'username' => $username,
+						'password' => $password,
+					]
+				)
+			);
+
+			if ( ! $user->save() ) {
 				return hp\rest_error( 400 );
 			}
 
-			// Get user.
-			$user = Models\User::query()->get_by_id( $user_id );
-
 			// Set provider ID.
-			update_user_meta( $user_id, hp\prefix( $provider ) . '_id', $response['id'] );
+			update_user_meta( $user->get_id(), hp\prefix( $provider . '_id' ), $response['id'] );
 
-			// Set name.
-			update_user_meta( $user_id, 'first_name', $response['first_name'] );
-			update_user_meta( $user_id, 'last_name', $response['last_name'] );
-
-			do_action( 'hivepress/v1/models/user/register', $user_id, $user );
+			do_action(
+				'hivepress/v1/models/user/register',
+				$user->get_id(),
+				array_merge(
+					$response,
+					[
+						'username' => $username,
+						'password' => $password,
+					]
+				)
+			);
 		} else {
-			$user_id = $user->ID;
+
+			// Get user.
+			$user = Models\User::query()->get_by_id( $user_object );
 		}
 
 		// Authenticate user.
 		if ( ! is_user_logged_in() ) {
-			wp_set_auth_cookie( $user_id, true );
+			wp_set_auth_cookie( $user->get_id(), true );
 		}
 
-		return new \WP_Rest_Response(
+		return hp\rest_response(
+			200,
 			[
-				'data' => [
-					'id' => $user_id,
-				],
-			],
-			200
+				'id' => $user->get_id(),
+			]
 		);
 	}
 }
