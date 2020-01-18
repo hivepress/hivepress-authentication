@@ -125,7 +125,7 @@ final class Authentication extends Controller {
 			);
 
 			if ( ! $user->save() ) {
-				return hp\rest_error( 400 );
+				return hp\rest_error( 400, $user->_get_errors() );
 			}
 
 			// Set authenticator ID.
