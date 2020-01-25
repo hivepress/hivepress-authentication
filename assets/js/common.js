@@ -4,11 +4,11 @@
 	// User authentication
 	hivepress.authUser = function(data) {
 		$.ajax({
-			url: hpCoreFrontendData.apiURL + '/auth/' + data.provider,
+			url: hivepressAuthenticationData.apiURL + data.authenticator,
 			method: 'POST',
 			data: data,
 			beforeSend: function(xhr) {
-				xhr.setRequestHeader('X-WP-Nonce', hpCoreFrontendData.apiNonce);
+				xhr.setRequestHeader('X-WP-Nonce', hivepressCoreData.apiNonce);
 			},
 			complete: function(xhr) {
 				var response = xhr.responseJSON;
@@ -25,7 +25,7 @@
 		FB.getLoginStatus(function(response) {
 			if (response.status === 'connected') {
 				hivepress.authUser({
-					'provider': 'facebook',
+					'authenticator': 'facebook',
 					'access_token': response.authResponse.accessToken,
 				});
 			}
@@ -35,7 +35,7 @@
 	// Google callback
 	window.onGoogleAuth = function(user) {
 		hivepress.authUser({
-			'provider': 'google',
+			'authenticator': 'google',
 			'id_token': user.getAuthResponse().id_token,
 		});
 	}

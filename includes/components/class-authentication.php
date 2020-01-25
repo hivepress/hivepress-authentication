@@ -17,40 +17,42 @@ defined( 'ABSPATH' ) || exit;
  *
  * @class Authentication
  */
-final class Authentication {
+final class Authentication extends Component {
 
 	/**
 	 * Class constructor.
+	 *
+	 * @param array $args Component arguments.
 	 */
-	public function __construct() {
-		if ( ! is_admin() ) {
+	public function __construct( $args = [] ) {
+		if ( ! is_user_logged_in() && ! is_admin() ) {
 
-			// Render buttons.
-			add_filter( 'hivepress/v1/forms/form/args', [ $this, 'render_buttons' ], 10, 2 );
+			// Render form header.
+			add_filter( 'hivepress/v1/forms/user_login', [ $this, 'render_form_header' ] );
+			add_filter( 'hivepress/v1/forms/user_register', [ $this, 'render_form_header' ] );
 		}
+
+		parent::__construct( $args );
 	}
 
 	/**
-	 * Renders buttons.
+	 * Renders form header.
 	 *
-	 * @param array  $args Form arguments.
-	 * @param string $form Form name.
+	 * @param array $args Form arguments.
 	 * @return array
 	 */
-	public function render_buttons( $args, $form ) {
-		if ( in_array( $form, [ 'user_login', 'user_register' ], true ) ) {
+	public function render_form_header( $args ) {
 
-			// Filter buttons HTML.
-			$buttons = apply_filters( 'hivepress/v1/auth/buttons', '' );
+		// Get header.
+		$header = apply_filters( 'hivepress/v1/forms/user_authenticate/header', '' );
 
-			// Format buttons.
-			if ( '' !== $buttons ) {
-				$buttons = preg_replace( '/(<br>)+$/', '', $buttons ) . '<hr>';
-			}
-
-			// Add buttons.
-			$args['header'] = hp\get_array_value( $args, 'header' ) . $buttons;
+		// Format header.
+		if ( $header ) {
+			$header = preg_replace( '/(<br>)+$/', '', $header ) . '<hr>';
 		}
+
+		// Set header.
+		$args['header'] = hp\get_array_value( $args, 'header' ) . $header;
 
 		return $args;
 	}

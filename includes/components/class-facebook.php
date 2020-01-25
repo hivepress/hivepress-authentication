@@ -17,22 +17,24 @@ defined( 'ABSPATH' ) || exit;
  *
  * @class Facebook
  */
-final class Facebook {
+final class Facebook extends Component {
 
 	/**
 	 * Class constructor.
+	 *
+	 * @param array $args Component arguments.
 	 */
-	public function __construct() {
+	public function __construct( $args = [] ) {
 
 		// Check Facebook status.
-		if ( is_user_logged_in() || ! in_array( 'facebook', (array) get_option( 'hp_user_auth_methods' ), true ) || ! get_option( 'hp_facebook_app_id' ) ) {
+		if ( ! in_array( 'facebook', (array) get_option( 'hp_user_auth_methods' ), true ) || ! get_option( 'hp_facebook_app_id' ) ) {
 			return;
 		}
 
 		// Set response.
-		add_filter( 'hivepress/v1/auth/response', [ $this, 'set_response' ], 10, 3 );
+		add_filter( 'hivepress/v1/authenticators/facebook/response', [ $this, 'set_response' ], 10, 2 );
 
-		if ( ! is_admin() ) {
+		if ( ! is_user_logged_in() && ! is_admin() ) {
 
 			// Enqueue scripts.
 			add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
@@ -41,36 +43,33 @@ final class Facebook {
 			add_action( 'wp_footer', [ $this, 'render_footer' ] );
 
 			// Render button.
-			add_filter( 'hivepress/v1/auth/buttons', [ $this, 'render_button' ] );
+			add_filter( 'hivepress/v1/forms/user_authenticate/header', [ $this, 'render_button' ] );
 		}
+
+		parent::__construct( $args );
 	}
 
 	/**
 	 * Sets response.
 	 *
-	 * @param array  $response Response data.
-	 * @param array  $request Request data.
-	 * @param string $provider Provider name.
+	 * @param array $response Response data.
+	 * @param array $request Request data.
 	 * @return mixed
 	 */
-	public function set_response( $response, $request, $provider ) {
-		if ( 'facebook' === $provider ) {
-			$response = json_decode(
-				wp_remote_retrieve_body(
-					wp_remote_get(
-						'https://graph.facebook.com/v4.0/me?' . http_build_query(
-							[
-								'fields'       => 'id,first_name,last_name,email',
-								'access_token' => $request['access_token'],
-							]
-						)
+	public function set_response( $response, $request ) {
+		return json_decode(
+			wp_remote_retrieve_body(
+				wp_remote_get(
+					'https://graph.facebook.com/v4.0/me?' . http_build_query(
+						[
+							'fields'       => 'id,first_name,last_name,email',
+							'access_token' => hp\get_array_value( $request, 'access_token' ),
+						]
 					)
-				),
-				true
-			);
-		}
-
-		return $response;
+				)
+			),
+			true
+		);
 	}
 
 	/**
@@ -107,7 +106,7 @@ final class Facebook {
 	/**
 	 * Renders button.
 	 *
-	 * @param string $output Button HTML.
+	 * @param string $output Header HTML.
 	 * @return string
 	 */
 	public function render_button( $output ) {
