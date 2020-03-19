@@ -128,6 +128,8 @@ final class Authentication extends Controller {
 				return hp\rest_error( 400, $user->_get_errors() );
 			}
 
+			$user_object = get_userdata( $user->get_id() );
+
 			// Set authenticator ID.
 			update_user_meta( $user->get_id(), hp\prefix( $authenticator . '_id' ), $response['id'] );
 
@@ -149,7 +151,11 @@ final class Authentication extends Controller {
 
 		// Authenticate user.
 		if ( ! is_user_logged_in() ) {
+			do_action( 'hivepress/v1/models/user/login' );
+
 			wp_set_auth_cookie( $user->get_id(), true );
+
+			do_action( 'wp_login', $user->get_username(), $user_object );
 		}
 
 		return hp\rest_response(
