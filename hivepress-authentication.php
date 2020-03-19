@@ -2,7 +2,7 @@
 /**
  * Plugin Name: HivePress Authentication
  * Description: Allow users to sign in via third-party services.
- * Version: 1.1.0
+ * Version: 1.1.1
  * Author: HivePress
  * Author URI: https://hivepress.io/
  * Text Domain: hivepress-authentication
