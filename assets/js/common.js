@@ -38,5 +38,7 @@
 			'authenticator': 'google',
 			'id_token': user.getAuthResponse().id_token,
 		});
+
+		gapi.auth2.getAuthInstance().disconnect();
 	}
 })(jQuery);
