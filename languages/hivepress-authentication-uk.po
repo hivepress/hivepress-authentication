@@ -18,7 +18,7 @@ msgstr ""
 #: includes/configs/settings.php:19
 msgid "Authentication Methods"
 msgstr ""
-"Методи аутентифікації\n"
+"Методи аутентифікації"
 
 #: includes/configs/settings.php:20
 msgid ""
@@ -31,7 +31,7 @@ msgstr ""
 #. Name of the plugin
 msgid "HivePress Authentication"
 msgstr ""
-"HivePress Аутентифікація\n"
+"HivePress Аутентифікація"
 
 #. Description of the plugin
 msgid "Allow users to sign in via third-party services."
@@ -40,9 +40,9 @@ msgstr "Дайте користувачам можливість входити 
 #. Author of the plugin
 msgid "HivePress"
 msgstr ""
-"HivePress\n"
+"HivePress"
 
 #. Author URI of the plugin
 msgid "https://hivepress.io/"
 msgstr ""
-"https://hivepress.io/\n"
+"https://hivepress.io/"

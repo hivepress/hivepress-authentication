@@ -1,6 +1,6 @@
 <?php
 /**
- * Facebook component.
+ * Facebook authentication component.
  *
  * @package HivePress\Components
  */
@@ -13,11 +13,11 @@ use HivePress\Helpers as hp;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Facebook component class.
+ * Facebook authentication component class.
  *
- * @class Facebook
+ * @class Facebook_Authentication
  */
-final class Facebook extends Component {
+final class Facebook_Authentication extends Component {
 
 	/**
 	 * Class constructor.
