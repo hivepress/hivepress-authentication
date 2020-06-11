@@ -1,6 +1,6 @@
 <?php
 /**
- * Google component.
+ * Google authentication component.
  *
  * @package HivePress\Components
  */
@@ -13,11 +13,11 @@ use HivePress\Helpers as hp;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Google component class.
+ * Google authentication component class.
  *
- * @class Google
+ * @class Google_Authentication
  */
-final class Google extends Component {
+final class Google_Authentication extends Component {
 
 	/**
 	 * Class constructor.
