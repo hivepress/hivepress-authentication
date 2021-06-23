@@ -123,6 +123,10 @@ final class Authentication extends Controller {
 				return hp\rest_error( 400, $user->_get_errors() );
 			}
 
+			// Update user name.
+			$user->save( [ 'first_name', 'last_name' ] );
+
+			// Set user object.
 			$user_object = get_userdata( $user->get_id() );
 
 			// Set authenticator ID.
