@@ -15,7 +15,7 @@ Allow users to sign in via third-party services.
 
 HivePress Authentication is an extension for [HivePress](https://wordpress.org/plugins/hivepress/) plugin. It allows users to sign in via third-party services.
 
-Please note that this extension is now in *maintenance mode*, if you need more authentication methods please consider using [this one](https://hivepress.io/extensions/social-login/?utm_medium=referral&utm_source=wordpress.org) instead.
+Please note that this extension is now in **maintenance mode**, if you need more authentication methods please consider using [this one](https://hivepress.io/extensions/social-login/?utm_medium=referral&utm_source=wordpress.org) instead.
 
 [Demo](https://listinghive.hivepress.io/) | [Docs](https://hivepress.io/docs/extensions/authentication/?utm_medium=referral&utm_source=wordpress.org) | [Support](https://hivepress.io/support/forum/extensions/authentication/?utm_medium=referral&utm_source=wordpress.org)
 
