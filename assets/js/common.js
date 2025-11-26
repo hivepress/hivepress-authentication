@@ -12,7 +12,6 @@
 			},
 			complete: function(xhr) {
 				var response = xhr.responseJSON;
-
 				if (response === null || response.hasOwnProperty('data')) {
 					window.location.reload(true);
 				}
@@ -32,13 +31,13 @@
 		});
 	}
 
-	// Google callback
-	window.onGoogleAuth = function(user) {
+	// Google callback - UPDATED for new Google Identity Services
+	window.onGoogleAuth = function(credentialResponse) {
+		// New API returns JWT token directly in credential property
 		hivepress.authUser({
 			'authenticator': 'google',
-			'id_token': user.getAuthResponse().id_token,
+			'id_token': credentialResponse.credential,
 		});
-
-		gapi.auth2.getAuthInstance().disconnect();
 	}
+
 })(jQuery);
