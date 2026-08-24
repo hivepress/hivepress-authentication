@@ -4,7 +4,7 @@
  * Description: Allow users to sign in via third-party services.
  * Requires at least: 5.0
  * Requires PHP: 7.4
- * Version: 1.1.4
+ * Version: 1.1.5
  * Author: HivePress
  * Author URI: https://hivepress.io/
  * Text Domain: hivepress-authentication
