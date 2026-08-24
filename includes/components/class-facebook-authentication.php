@@ -26,8 +26,11 @@ final class Facebook_Authentication extends Component {
 	 */
 	public function __construct( $args = [] ) {
 
+		// Add admin notices.
+		add_filter( 'hivepress/v1/admin_notices', [ $this, 'add_admin_notices' ] );
+
 		// Check Facebook status.
-		if ( ! in_array( 'facebook', (array) get_option( 'hp_user_auth_methods' ), true ) || ! get_option( 'hp_facebook_app_id' ) ) {
+		if ( ! in_array( 'facebook', (array) get_option( 'hp_user_auth_methods' ), true ) || ! get_option( 'hp_facebook_app_id' ) || ! get_option( 'hp_facebook_app_secret' ) ) {
 			return;
 		}
 
@@ -50,6 +53,24 @@ final class Facebook_Authentication extends Component {
 	}
 
 	/**
+	 * Adds admin notices.
+	 *
+	 * @param array $notices Admin notices.
+	 * @return array
+	 */
+	public function add_admin_notices( $notices ) {
+		if ( in_array( 'facebook', (array) get_option( 'hp_user_auth_methods' ), true ) && ! get_option( 'hp_facebook_app_secret' ) ) {
+			$notices['facebook_app_secret_required'] = [
+				'type' => 'error',
+				/* translators: %s: settings link. */
+				'text' => sprintf( hp\sanitize_html( __( 'Please add an App Secret for %s to continue working.', 'hivepress-authentication' ) ), '<a href="' . esc_url( admin_url( 'admin.php?page=hp_settings&tab=integrations' ) ) . '">Facebook Login</a>' ),
+			];
+		}
+
+		return $notices;
+	}
+
+	/**
 	 * Sets response.
 	 *
 	 * @param array $response Response data.
@@ -57,13 +78,41 @@ final class Facebook_Authentication extends Component {
 	 * @return mixed
 	 */
 	public function set_response( $response, $request ) {
+
+		// Get access token.
+		$access_token = hp\get_array_value( $request, 'access_token' );
+
+		// Get token data.
+		$token_data = hp\get_array_value(
+			json_decode(
+				wp_remote_retrieve_body(
+					wp_remote_get(
+						'https://graph.facebook.com/debug_token?' . http_build_query(
+							[
+								'input_token'  => $access_token,
+								'access_token' => get_option( 'hp_facebook_app_id' ) . '|' . get_option( 'hp_facebook_app_secret' ),
+							]
+						)
+					)
+				),
+				true
+			),
+			'data',
+			[]
+		);
+
+		// Verify app ID.
+		if ( ! hp\get_array_value( $token_data, 'is_valid' ) || get_option( 'hp_facebook_app_id' ) !== (string) hp\get_array_value( $token_data, 'app_id' ) ) {
+			return [ 'error' => 'invalid_client' ];
+		}
+
 		return json_decode(
 			wp_remote_retrieve_body(
 				wp_remote_get(
 					'https://graph.facebook.com/v4.0/me?' . http_build_query(
 						[
 							'fields'       => 'id,first_name,last_name,email',
-							'access_token' => hp\get_array_value( $request, 'access_token' ),
+							'access_token' => $access_token,
 						]
 					)
 				)
