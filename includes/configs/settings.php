@@ -50,11 +50,18 @@ return [
 				'_order' => 100,
 
 				'fields' => [
-					'facebook_app_id' => [
+					'facebook_app_id'     => [
 						'label'      => hivepress()->translator->get_string( 'app_id' ),
 						'type'       => 'text',
 						'max_length' => 256,
 						'_order'     => 10,
+					],
+
+					'facebook_app_secret' => [
+						'label'      => esc_html__( 'App Secret', 'hivepress-authentication' ),
+						'type'       => 'text',
+						'max_length' => 256,
+						'_order'     => 20,
 					],
 				],
 			],
