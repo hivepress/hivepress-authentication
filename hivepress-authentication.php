@@ -2,6 +2,8 @@
 /**
  * Plugin Name: HivePress Authentication
  * Description: Allow users to sign in via third-party services.
+ * Requires at least: 5.0
+ * Requires PHP: 7.4
  * Version: 1.1.4
  * Author: HivePress
  * Author URI: https://hivepress.io/
